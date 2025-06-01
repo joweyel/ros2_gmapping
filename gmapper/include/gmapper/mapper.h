@@ -8,6 +8,7 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
+#include "geometry_msgs/msg/pose_array.hpp"
 #include "std_msgs/msg/float64.hpp"
 #include "nav_msgs/msg/occupancy_grid.hpp"
 #include "nav_msgs/msg/map_meta_data.hpp"
@@ -42,6 +43,7 @@ private:
     rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr entropy_publisher_;
     rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr sst_;
     rclcpp::Publisher<nav_msgs::msg::MapMetaData>::SharedPtr sstm_;
+    rclcpp::Publisher<geometry_msgs::msg::PoseArray>::SharedPtr pf_publisher_;
 
     std::shared_ptr<tf2_ros::Buffer> buffer_;
     std::shared_ptr<tf2_ros::TransformListener> tfl_;
@@ -88,6 +90,7 @@ private:
     bool initMapper(sensor_msgs::msg::LaserScan::ConstSharedPtr scan);
     bool addScan(sensor_msgs::msg::LaserScan::ConstSharedPtr scan, GMapping::OrientedPoint& gmap_pose);
     double computePoseEntropy();
+    void publishParticles();
 
     // Parameters used by GMapping
     double maxRange_;

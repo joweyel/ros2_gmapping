@@ -76,6 +76,8 @@ void SlamGmapping::startLiveSlam() {
     entropy_publisher_ = this->create_publisher<std_msgs::msg::Float64>("entropy", rclcpp::SystemDefaultsQoS());
     sst_ = this->create_publisher<nav_msgs::msg::OccupancyGrid>("map", rclcpp::SystemDefaultsQoS());
     sstm_ = this->create_publisher<nav_msgs::msg::MapMetaData>("map_metadata", rclcpp::SystemDefaultsQoS());
+    pf_publisher_ = this->create_publisher<geometry_msgs::msg::PoseArray>("particles", rclcpp::SystemDefaultsQoS());
+
     scan_filter_sub_ = std::make_shared<message_filters::Subscriber<sensor_msgs::msg::LaserScan>>
             (node_, "scan", rclcpp::SensorDataQoS().get_rmw_qos_profile());
 //    sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
@@ -108,6 +110,27 @@ SlamGmapping::~SlamGmapping()
     delete gsp_laser_;
     delete gsp_odom_;
 }
+
+void SlamGmapping::publishParticles()
+{
+    geometry_msgs::msg::PoseArray particles;
+    particles.header.stamp = this->get_clock()->now();
+    particles.header.frame_id = this->map_frame_;
+
+    for (const auto& particle : this->gsp_->getParticles())
+    {
+        geometry_msgs::msg::Pose pose;
+        pose.position.x = particle.pose.x;
+        pose.position.y = particle.pose.y;
+        pose.position.z = 0;
+        tf2::Quaternion q;
+        q.setRPY(0, 0, particle.pose.theta);
+        pose.orientation = tf2::toMsg(q);
+        particles.poses.push_back(pose);
+    }
+    pf_publisher_->publish(particles);
+}
+
 
 bool SlamGmapping::getOdomPose(GMapping::OrientedPoint& gmap_pose, const rclcpp::Time& t)
 {

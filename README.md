@@ -134,6 +134,15 @@ Ensure that you have installed the following:
 - **Gazebo** for simulation.
 - **TurtleBot3** packages (`turtlebot3`, `turtlebot3_simulations`).
 
+### Step 0: Build the package
+There are some problems when building the workspace. Use the following instructions to get it to work:
+```sh
+colcon build --packages-select openslam_gmapping
+colcon build --packages-select gmapper
+colcon build
+source install/setup.bash
+```
+
 ### Step 1: Set Up Environment Variables
 To begin, export the environment variables for **TurtleBot3** . In your terminal, run:
 
@@ -171,7 +180,7 @@ ros2 run turtlebot3_teleop teleop_keyboard
 Use the keyboard commands to drive the robot around and watch as the **RBPF** builds a map and tracks the robot's pose.
 
 
-or insetead of doing all the steps manually, you can use the following bash script to run all the nodes at the same time. 
+or instead of doing all the steps manually, you can use the following bash script to run all the nodes at the same time. 
 
 ```sh
 cd <your workspace/src/ros2_gmapping
