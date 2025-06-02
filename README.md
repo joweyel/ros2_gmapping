@@ -18,15 +18,17 @@ This division enables a more efficient representation of the uncertainty inheren
 
 In this implementation, the **Rao-Blackwellized Particle Filter** is used to represent the posterior distribution of the robot pose and map as:
 
-P(x<sub>t</sub>, m | z<sub>1:t</sub>, u<sub>1:t-1</sub>) = P(x<sub>t</sub> | z<sub>1:t</sub>, u<sub>1:t-1</sub>) * P(m | x<sub>1:t</sub>, z<sub>1:t</sub>)
+<!-- P(x<sub>t</sub>, m | z<sub>1:t</sub>, u<sub>1:t-1</sub>) = P(x<sub>t</sub> | z<sub>1:t</sub>, u<sub>1:t-1</sub>) * P(m | x<sub>1:t</sub>, z<sub>1:t</sub>) -->
+$P(x_t, m | z_{1:t}, u_{1:t-1}) = P(x_t | z_{1:t}, u_{1:t-1}) \cdot P(m | x_{1:t}, z_{1:t})$
+
 
 Where:
-- **x<sub>t</sub>** represents the robot pose at time **t**.
-- **m** represents the map.
-- **z<sub>1:t</sub>** are all sensor measurements from the beginning until time **t**.
-- **u<sub>1:t-1</sub>** are all odometry readings from the beginning until time **t-1**.
+- $x_t$ represents the robot pose at time $t$.
+- $m$ represents the map.
+- $z_{1:t}$ are all sensor measurements from the beginning until time $t$.
+- $u_{1:t-1}$ are all odometry readings from the beginning until time $t-1$.
 
-The particle filter estimates the robot's pose (**x<sub>t</sub>**), while a separate map estimation step is performed for each particle to incrementally build the map (**m**). In this implementation, particles are visualized as small arrows or dots around the robot's estimated position in **RViz** to illustrate the distribution of possible robot poses.
+The particle filter estimates the robot's pose ($x_t$), while a separate map estimation step is performed for each particle to incrementally build the map ($m$). In this implementation, particles are visualized as small arrows or dots around the robot's estimated position in **RViz** to illustrate the distribution of possible robot poses.
 
 ### Implementation Details
 
@@ -147,7 +149,7 @@ source install/setup.bash
 To begin, export the environment variables for **TurtleBot3** . In your terminal, run:
 
 ```sh
-export TURTLEBOT3_MODEL=burger    
+export TURTLEBOT3_MODEL=burger
 ```
 This sets the **TurtleBot3** model to **Burger**. You can change it to **waffle** or **waffle_pi** if desired.
 
@@ -161,7 +163,7 @@ This command will launch the **Gazebo** environment with **TurtleBot3** placed i
 ### Step 3: Launch SLAM Node
 In a new terminal, launch the **Gmapping** SLAM node from this repository:
 ```sh
-ros2 run gmapper gmap  
+ros2 run gmapper gmap
 ```
 Ensure that the **TurtleBot3** and **Gmapping** nodes are communicating over the same ROS 2 network.
 
@@ -187,7 +189,5 @@ cd <your workspace/src/ros2_gmapping
 chmod +x mapping.sh
 ./mapping.sh
 ```
-
-
 
 Feel free to explore, modify, and extend this implementation for your SLAM projects!
